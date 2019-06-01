@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Maksim Pugach](https://up.htmlacademy.ru/javascript/17/user/938863).
-* Наставник: `Неизвестно`.
+* Наставник: `Andrey Lutogin`.
 
 ---
 
