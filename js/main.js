@@ -19,16 +19,16 @@ function getRandomInt(min, max) {
   ];
   for (var i = 1; i < 26; i++) {
     var photoComments = [];
-    for (var j = 0; j <= getRandomInt(1,3); j++) {
+    for (var j = 0; j <= getRandomInt(1, 3); j++) {
       photoComments.push({
-        avatar: 'img/avatar-{{avatarID}}.svg'.replace('{{avatarID}}', getRandomInt(1,6)),
-        message: userComments[getRandomInt(0,userComments.length)],
-        name: userNames[getRandomInt(0,userNames.length)]
+        avatar: 'img/avatar-{{avatarID}}.svg'.replace('{{avatarID}}', getRandomInt(1, 6)),
+        message: userComments[getRandomInt(0, userComments.length)],
+        name: userNames[getRandomInt(0, userNames.length)]
       });
     }
     resultout.push({
       url: 'photos/{{i}}.jpg'.replace('{{i}}', i),
-      likes: getRandomInt(15,200),
+      likes: getRandomInt(15, 200),
       comments: photoComments,
     });
   }
