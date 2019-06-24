@@ -156,14 +156,36 @@ for (var i = 0; i < effectChanges.length; i++) {
   };
 }
 
+var effectDepth = document.querySelector('.effect-level__depth');
+
 /**
  * оброботка изменений позиции слайдера
  */
-document.querySelector('.effect-level__pin').onmouseup = function () {
-  effectLevel.value = parseInt(this.style.left, 10);
-  effectLevel.onchange();
-};
 
+effectPin.onmousedown = function () {
+  var sliderWidth = document.querySelector(".effect-level__line").offsetWidth;
+  effectPin.onmousemove = function (event) {
+    var  pinMovement = effectPin.offsetLeft + event.movementX;
+    console.log(pinMovement, sliderWidth);
+    if (pinMovement < 0 || pinMovement > sliderWidth) {
+      return;
+    }
+    effectPin.style.left = pinMovement + 'px';
+    effectDepth.style.width = pinMovement + 'px';
+
+  };
+  effectPin.onmouseup = function () {
+    effectPin.onmousemove = null;
+    effectLevel.value = parseInt(this.style.left, 10) / sliderWidth + '%';
+    effectLevel.onchange();
+  };
+};
+document.querySelector('body').addEventListener('mouseup', function () {
+  effectPin.onmousemove = null;
+  var sliderWidth = document.querySelector(".effect-level__line").offsetWidth;
+  effectLevel.value = parseInt(effectPin.style.left, 10) / sliderWidth + '%';
+  effectLevel.onchange();
+});
 /**
  * измнеения насыщенности фильтра
  */
