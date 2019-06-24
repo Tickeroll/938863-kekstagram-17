@@ -1,9 +1,21 @@
 'use strict';
+
+/**
+ * Функция возвращает случайное целое число
+ * @param min
+ * @param max
+ * @returns {number}
+ */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
+/**
+ * Генерирует массив лданных содержащих фотографии с данными пользователей
+ * @returns {Array}
+ */
 function generatePhotoList() {
   var resultout = [];
   var userNames = [
@@ -37,6 +49,10 @@ function generatePhotoList() {
 var template = document.querySelector('#picture');
 var photos = generatePhotoList();
 var photoBlockElement = document.querySelector('.pictures');
+
+/**
+ *Добавляем в разметку блоки с фтографиями и описанием
+ */
 for (var i = 0; i < photos.length; i++) {
   var node = document.importNode(template.content, true);
   node.querySelector('img').src = photos[i].url;
@@ -44,3 +60,138 @@ for (var i = 0; i < photos.length; i++) {
   node.querySelector('.picture__comments').textContent = photos[i].comments.length;
   photoBlockElement.appendChild(node);
 }
+var uploadForm = document.querySelector('.img-upload__overlay');
+var formEscape = document.querySelector('#upload-cancel');
+var scaleControlValue = document.querySelector('.scale__control--value');
+
+/**
+ * отображаем форму при загрузке фото
+ */
+document.querySelector('#upload-file').onchange = function () {
+  uploadForm.classList.remove('hidden');
+};
+
+/**
+ * при нжатии ан ескапе скрывается форма
+ * @param {Event} event
+ */
+document.getElementsByTagName('body')[0].onkeyup = function (event) {
+  if (event.key === 'Escape') {
+    uploadForm.classList.add('hidden');
+  }
+};
+
+formEscape.onclick = function () {
+  uploadForm.classList.add('hidden');
+};
+
+/**
+ * уменьшает картинку при нажатии кнопки
+ */
+document.querySelector('.scale__control--smaller').onclick = function () {
+  var percent = parseInt(scaleControlValue.value, 10);
+  percent -= 25;
+  if (percent > 0) {
+    scaleControlValue.value = percent + '%';
+    scaleControlValue.onchange();
+  }
+};
+
+/**
+ * Увеличивает картинку при нажатии кнопки
+ */
+document.querySelector('.scale__control--bigger').onclick = function () {
+  var percent = parseInt(scaleControlValue.value, 10);
+  percent += 25;
+  if (percent < 100) {
+    scaleControlValue.value = percent + '%';
+    scaleControlValue.onchange();
+  }
+};
+
+scaleControlValue.onchange = function () {
+  document.querySelector('.img-upload__preview').style.transform = 'scale(0.' + parseInt(scaleControlValue.value, 10) + ')';
+};
+
+var effectChanges = document.querySelectorAll('.effects__radio');
+var currentEffect = '';
+var effectLevel = document.querySelector('.effect-level__value');
+var effectPin = document.querySelector('.effect-level__pin');
+
+/**
+ * Добавление обработчиков при нажатии кнопки мышки
+ */
+for (var i = 0; i < effectChanges.length; i++) {
+  effectChanges[i].onclick = function () {
+    currentEffect = this.id;
+    document.querySelector('.img-upload__preview img');
+    switch (this.id) {
+      case 'effect-none':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--none';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.add('hidden');
+        break;
+      case 'effect-chrome':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--chrome';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+        break;
+      case 'effect-sepia':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--sepia';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+        break;
+      case 'effect-marvin':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--marvin';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+        break;
+      case 'effect-phobos':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--phobos';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+        break;
+      case 'effect-heat':
+        document.querySelector('.img-upload__preview img').className = 'effects__preview--heat';
+        document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+        break;
+    }
+    effectPin.style.left = '100%';
+    effectPin.onmouseup();
+  };
+}
+
+/**
+ * оброботка изменений позиции слайдера
+ */
+document.querySelector('.effect-level__pin').onmouseup = function () {
+  effectLevel.value = parseInt(this.style.left, 10);
+  effectLevel.onchange();
+};
+
+/**
+ * измнеения насыщенности фильтра
+ */
+effectLevel.onchange = function () {
+  switch (currentEffect) {
+    case 'effect-none':
+      document.querySelector('.img-upload__preview').style.filter = '';
+      break;
+    case 'effect-chrome':
+      document.querySelector('.img-upload__preview').style.filter = 'grayscale(' + (this.value / 100) + ')';
+      break;
+    case 'effect-sepia':
+      document.querySelector('.img-upload__preview').style.filter = 'sepia(' + (this.value / 100) + ')';
+      break;
+    case 'effect-marvin':
+      document.querySelector('.img-upload__preview').style.filter = 'invert(' + (this.value) + '%)';
+      break;
+    case 'effect-phobos':
+      document.querySelector('.img-upload__preview').style.filter = 'blur(' + (this.value / 100 * 3) + 'px)';
+      break;
+    case 'effect-heat':
+      document.querySelector('.img-upload__preview').style.filter = 'brightness(' + (this.value / 100 * 3) + ')';
+      break;
+  }
+};
+
+document.forms[1].elements['description'].onkeyup = function (event) {
+  if (event.key === 'Escape') {
+    event.stopPropagation();
+  }
+};
