@@ -64,7 +64,6 @@
     effectPin.onmousemove = null;
     effectLevel.value = parseInt(this.style.left, 10) / sliderWidth;
     effectLevel.onchange();
-    console.log (parseInt(this.style.left, 10) / sliderWidth + '%');
   };
 
   /**
@@ -112,7 +111,6 @@
   effectPin.onmousedown = function () {
     effectPin.onmousemove = function (event) {
       var pinMovement = effectPin.offsetLeft + event.movementX;
-      console.log(pinMovement, sliderWidth);
       if (pinMovement < 0 || pinMovement > sliderWidth) {
         return;
       }
@@ -129,7 +127,6 @@
    * измнеения насыщенности фильтра
    */
   effectLevel.onchange = function () {
-    console.log(this.value);
     switch (currentEffect) {
       case 'effect-none':
         document.querySelector('.img-upload__preview img').style.filter = '';
