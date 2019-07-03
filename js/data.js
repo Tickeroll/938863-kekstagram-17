@@ -2,9 +2,9 @@
 window.generatePhotoList = (function () {
   /**
    * Функция возвращает случайное целое число
-   * @param min
-   * @param max
-   * @returns {number}
+   * @param {number} min
+   * @param {number} max
+   * @return {number}
    */
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -14,7 +14,7 @@ window.generatePhotoList = (function () {
 
   /**
    * Генерирует массив лданных содержащих фотографии с данными пользователей
-   * @returns {Array}
+   * @return {Array}
    */
   return function () {
     var resultout = [];

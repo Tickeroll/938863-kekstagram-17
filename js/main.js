@@ -2,9 +2,9 @@
 
 /**
  * Функция возвращает случайное целое число
- * @param min
- * @param max
- * @returns {number}
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
  */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -14,7 +14,7 @@ function getRandomInt(min, max) {
 
 /**
  * Генерирует массив лданных содержащих фотографии с данными пользователей
- * @returns {Array}
+ * @return {Array}
  */
 function generatePhotoList() {
   var resultout = [];
@@ -74,7 +74,7 @@ document.querySelector('#upload-file').onchange = function () {
 
 
 /**
- * при нжатии ан ескапе скрывается форма
+ * при нжатии на ескапе скрывается форма
  * @param {Event} event
  */
 document.getElementsByTagName('body')[0].onkeyup = function (event) {
@@ -166,10 +166,9 @@ var effectDepth = document.querySelector('.effect-level__depth');
  * оброботка изменений позиции слайдера
  */
 effectPin.onmousedown = function () {
-  var sliderWidth = document.querySelector(".effect-level__line").offsetWidth;
+  var sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   effectPin.onmousemove = function (event) {
     var  pinMovement = effectPin.offsetLeft + event.movementX;
-    console.log(pinMovement, sliderWidth);
     if (pinMovement < 0 || pinMovement > sliderWidth) {
       return;
     }
@@ -185,7 +184,7 @@ effectPin.onmousedown = function () {
 };
 document.querySelector('body').addEventListener('mouseup', function () {
   effectPin.onmousemove = null;
-  var sliderWidth = document.querySelector(".effect-level__line").offsetWidth;
+  var sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   effectLevel.value = parseInt(effectPin.style.left, 10) / sliderWidth + '%';
   effectLevel.onchange();
 });
