@@ -31,7 +31,7 @@
       photoBlockElement.appendChild(node);
     }
   }
-var time = window.setTimeout(function () {console.log(1)}, 1000);
+  var lastTimeout;
   window.getData(function (photos) {
     /**
      *Добавляем в разметку блоки с фтографиями и описанием
@@ -42,7 +42,12 @@ var time = window.setTimeout(function () {console.log(1)}, 1000);
      * обработчик кнопки фильтра - "популярные"
      */
     document.querySelector('#filter-popular').addEventListener('click', function (event) {
-      renderPhotolist(photos);
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        renderPhotolist(photos);
+      }, 500);
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       event.target.classList.add('img-filters__button--active');
     });
@@ -60,7 +65,12 @@ var time = window.setTimeout(function () {console.log(1)}, 1000);
         index.push(indexPhoto);
         randomPhotos.push(photos[indexPhoto]);
       }
-      renderPhotolist(randomPhotos);
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        renderPhotolist(randomPhotos);
+      }, 500);
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       event.target.classList.add('img-filters__button--active');
     });
@@ -78,7 +88,12 @@ var time = window.setTimeout(function () {console.log(1)}, 1000);
         }
         return 0;
       });
-      renderPhotolist(newPhotos);
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        renderPhotolist(newPhotos);
+      }, 500);
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       event.target.classList.add('img-filters__button--active');
     });
