@@ -38,8 +38,27 @@
      */
     renderPhotolist(photos);
     document.querySelector('.img-filters').classList.remove('img-filters--inactive');
-    /**
-     * обработчик кнопки фильтра - "популярные"
+    document.querySelector('.big-picture').classList.remove('hidden');
+    document.querySelector('.big-picture__img img').src = photos[0].url;
+    document.querySelector('.likes-count').textContent = photos[0].likes;
+    document.querySelector('.comments-count').textContent = photos[0].comments.length;
+    document.querySelector('.social__caption').textContent = photos[0].description;
+    document.querySelector('.social__comment-count').classList.add('.visually-hidden');
+    document.querySelector('.comments-loader').classList.add('.visually-hidden');
+    var oldComments = document.querySelectorAll('.social__comments .social__comment');
+    for (var i = 0; i < oldComments.length; i++) {
+      oldComments[i].parentNode.removeChild(oldComments[i]);
+    }
+    var newComment = document.querySelector('.social__comments');
+    var templateComment = document.querySelector('#comment');
+    for (var i = 0; i < photos[0].comments.length; i++) {
+      var oneComment = document.importNode(templateComment.content, true);
+      oneComment.querySelector('img').src = 'img/avatar-' + getRandomInt(1, 6) + '.svg';
+      oneComment.querySelector('.social__text').textContent = photos[0].comments[i].message;
+      newComment.appendChild(oneComment);
+    }
+
+    /** обработчик кнопки фильтра - "популярные"
      */
     document.querySelector('#filter-popular').addEventListener('click', function (event) {
       if (lastTimeout) {
