@@ -22,11 +22,11 @@
    * при нжатии ан ескапе скрывается форма
    * @param {Event} event
    */
-  document.getElementsByTagName('body')[0].onkeyup = function (event) {
+  document.querySelector('body').addEventListener('keyup', function (event) {
     if (event.key === 'Escape') {
       uploadForm.classList.add('hidden');
     }
-  };
+  });
 
   formEscape.onclick = function () {
     uploadForm.classList.add('hidden');
