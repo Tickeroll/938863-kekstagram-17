@@ -9,7 +9,44 @@
   var effectPin = document.querySelector('.effect-level__pin');
   var sliderWidth;
   var effectDepth = document.querySelector('.effect-level__depth');
+  var form = document.querySelector('.img-upload__form');
+  var closePopup = function () {
+    uploadForm.classList.add('hidden');
+    formRestoreDefault();
+  };
 
+  var formRestoreDefault = function () {
+    var file = document.querySelector('#upload-file');
+    file.value = '';
+    document.querySelector('.text__description').value = '';
+    hashtagsInput.value = '';
+  };
+
+
+  var formUploadSuccessHandler = function () {
+    var uploadImg = document.querySelector('.img-upload__preview').firstElementChild;
+    uploadImg.style = '';
+    uploadImg.classList = '';
+    closePopup();
+    formRestoreDefault();
+    window.utility.createMessage('success', 'Загрузка успешна');
+  };
+
+  var formUploadErrorHandler = function () {
+    closePopup();
+    window.utility.createMessage('error', 'Ошибка загрузки');
+  };
+
+  // Отображение загружаемой в форму фотографии
+  var fileInput = document.querySelector('#upload-file');
+  fileInput.addEventListener('change', function () {
+    var file = fileInput.files[0];
+    var fReader = new FileReader();
+    fReader.addEventListener('load', function () {
+      document.querySelector('.img-upload__preview').firstElementChild.src = fReader.result;
+    });
+    fReader.readAsDataURL(file);
+  });
   /**
    * отображаем форму при загрузке фото
    */
@@ -17,6 +54,11 @@
     uploadForm.classList.remove('hidden');
     sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
+  });
 
   /**
    * при нжатии ан ескапе скрывается форма
