@@ -153,5 +153,50 @@
       event.stopPropagation();
     }
   };
+  // Валидация хештегов формы потравки фото
+  var hashtagsInput = document.querySelector('.text__hashtags');
+  var hashTagsInputHandler = function (evt) {
+    var hashArr = hashtagsInput.value.trim().replace(/\s+/g, ' ').split(' ');
+    var target = evt.target;
+    if (makeHashtagValidation(hashArr, target)) {
+      target.setCustomValidity(makeHashtagValidation(hashArr, target));
+    } else {
+      target.setCustomValidity('');
+      target.removeAttribute('style');
+    }
+  };
+  hashtagsInput.addEventListener('input', hashTagsInputHandler);
+  var makeHashtagValidation = function (arr, target) {
+    var outlineColorChanger = function (color) {
+      target.style.outline = '1px solid' + color;
+    };
+    var hashtagMaxLength = 20;
+    var hashtagMaxCount = 5;
+    var hashtagColor = '#f45f42';
+    var validityMessage;
+    arr.forEach(function (elem, i) {
+      if (elem[0] !== '#' && elem !== '') {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тег должен начинаться символом #';
+      } else if (elem.length > hashtagMaxLength) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Длина хеш тега не должна превышать ' + hashtagMaxLength + ' ';
+      } else if (arr.length > hashtagMaxCount) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тегов не может быть больше ' + hashtagMaxCount;
+      } else if (elem === '#' && elem.length < 2) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тег не может состоять из одной решётки';
+      }
+      for (var j = i + 1; j < arr.length; j++) {
+        if (elem.toUpperCase() === arr[j].toUpperCase()) {
+          outlineColorChanger(hashtagColor);
+          validityMessage = 'Один и тот же хеш-тег не может быть использован дважды';
+        }
+      }
+    });
+    return validityMessage;
+  };
+
 })();
 
