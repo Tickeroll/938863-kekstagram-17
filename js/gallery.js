@@ -25,7 +25,7 @@
       newComment.appendChild(oneComment);
     }
     document.querySelector('.social__comment-count').textContent = Math.min(COMMENT_NUMBER + COMMENT_NUMBER * offset, comments.length) + ' из ' + comments.length;
-    return  Math.min(COMMENT_NUMBER + COMMENT_NUMBER * offset, comments.length);
+    return Math.min(COMMENT_NUMBER + COMMENT_NUMBER * offset, comments.length);
   }
 
 
@@ -50,7 +50,7 @@
     renderComments(photo.comments, 0);
 
     var clickCounter = 1;
-    commentsLoader.onclick = function() {
+    commentsLoader.onclick = function () {
       var visibleCommentsNumber = renderComments(photo.comments, clickCounter);
       clickCounter++;
       if (visibleCommentsNumber === photo.comments.length) {
@@ -69,13 +69,13 @@
     for (var i = 0; i < pictures.length; i++) {
       pictures[i].parentNode.removeChild(pictures[i]);
     }
-    for (var i = 0; i < photos.length; i++) {
+    for (var j = 0; j < photos.length; j++) {
       var node = document.importNode(template.content, true);
-      node.querySelector('img').src = photos[i].url;
-      node.querySelector('.picture__likes').textContent = photos[i].likes;
-      node.querySelector('.picture__comments').textContent = photos[i].comments.length;
+      node.querySelector('img').src = photos[j].url;
+      node.querySelector('.picture__likes').textContent = photos[j].likes;
+      node.querySelector('.picture__comments').textContent = photos[j].comments.length;
       photoBlockElement.appendChild(node);
-      photoBlockElement.lastElementChild.photo = photos[i];
+      photoBlockElement.lastElementChild.photo = photos[j];
       photoBlockElement.lastElementChild.onclick = function () {
         renderBigImages(this.photo);
       };
