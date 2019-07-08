@@ -9,7 +9,44 @@
   var effectPin = document.querySelector('.effect-level__pin');
   var sliderWidth;
   var effectDepth = document.querySelector('.effect-level__depth');
+  var form = document.querySelector('.img-upload__form');
+  var closePopup = function () {
+    uploadForm.classList.add('hidden');
+    formRestoreDefault();
+  };
 
+  var formRestoreDefault = function () {
+    var file = document.querySelector('#upload-file');
+    file.value = '';
+    document.querySelector('.text__description').value = '';
+    hashtagsInput.value = '';
+  };
+
+
+  var formUploadSuccessHandler = function () {
+    var uploadImg = document.querySelector('.img-upload__preview').firstElementChild;
+    uploadImg.style = '';
+    uploadImg.classList = '';
+    closePopup();
+    formRestoreDefault();
+    window.utility.createMessage('success', 'Загрузка успешна');
+  };
+
+  var formUploadErrorHandler = function () {
+    closePopup();
+    window.utility.createMessage('error', 'Ошибка загрузки');
+  };
+
+  // Отображение загружаемой в форму фотографии
+  var fileInput = document.querySelector('#upload-file');
+  fileInput.addEventListener('change', function () {
+    var file = fileInput.files[0];
+    var fReader = new FileReader();
+    fReader.addEventListener('load', function () {
+      document.querySelector('.img-upload__preview').firstElementChild.src = fReader.result;
+    });
+    fReader.readAsDataURL(file);
+  });
   /**
    * отображаем форму при загрузке фото
    */
@@ -18,15 +55,20 @@
     sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   };
 
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
+  });
+
   /**
    * при нжатии ан ескапе скрывается форма
    * @param {Event} event
    */
-  document.getElementsByTagName('body')[0].onkeyup = function (event) {
+  document.querySelector('body').addEventListener('keyup', function (event) {
     if (event.key === 'Escape') {
       uploadForm.classList.add('hidden');
     }
-  };
+  });
 
   formEscape.onclick = function () {
     uploadForm.classList.add('hidden');
@@ -153,5 +195,50 @@
       event.stopPropagation();
     }
   };
+  // Валидация хештегов формы потравки фото
+  var hashtagsInput = document.querySelector('.text__hashtags');
+  var hashTagsInputHandler = function (evt) {
+    var hashArr = hashtagsInput.value.trim().replace(/\s+/g, ' ').split(' ');
+    var target = evt.target;
+    if (makeHashtagValidation(hashArr, target)) {
+      target.setCustomValidity(makeHashtagValidation(hashArr, target));
+    } else {
+      target.setCustomValidity('');
+      target.removeAttribute('style');
+    }
+  };
+  hashtagsInput.addEventListener('input', hashTagsInputHandler);
+  var makeHashtagValidation = function (arr, target) {
+    var outlineColorChanger = function (color) {
+      target.style.outline = '1px solid' + color;
+    };
+    var hashtagMaxLength = 20;
+    var hashtagMaxCount = 5;
+    var hashtagColor = '#f45f42';
+    var validityMessage;
+    arr.forEach(function (elem, i) {
+      if (elem[0] !== '#' && elem !== '') {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тег должен начинаться символом #';
+      } else if (elem.length > hashtagMaxLength) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Длина хеш тега не должна превышать ' + hashtagMaxLength + ' ';
+      } else if (arr.length > hashtagMaxCount) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тегов не может быть больше ' + hashtagMaxCount;
+      } else if (elem === '#' && elem.length < 2) {
+        outlineColorChanger(hashtagColor);
+        validityMessage = 'Хеш тег не может состоять из одной решётки';
+      }
+      for (var j = i + 1; j < arr.length; j++) {
+        if (elem.toUpperCase() === arr[j].toUpperCase()) {
+          outlineColorChanger(hashtagColor);
+          validityMessage = 'Один и тот же хеш-тег не может быть использован дважды';
+        }
+      }
+    });
+    return validityMessage;
+  };
+
 })();
 

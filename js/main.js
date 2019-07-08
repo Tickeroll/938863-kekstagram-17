@@ -61,6 +61,7 @@ for (var i = 0; i < photos.length; i++) {
   photoBlockElement.appendChild(node);
 }
 var uploadForm = document.querySelector('.img-upload__overlay');
+
 var formEscape = document.querySelector('#upload-cancel');
 var scaleControlValue = document.querySelector('.scale__control--value');
 
@@ -70,6 +71,7 @@ var scaleControlValue = document.querySelector('.scale__control--value');
 document.querySelector('#upload-file').onchange = function () {
   uploadForm.classList.remove('hidden');
 };
+
 
 /**
  * при нжатии на ескапе скрывается форма
@@ -84,6 +86,7 @@ document.getElementsByTagName('body')[0].onkeyup = function (event) {
 formEscape.onclick = function () {
   uploadForm.classList.add('hidden');
 };
+
 
 /**
  * уменьшает картинку при нажатии кнопки
@@ -156,12 +159,12 @@ for (var i = 0; i < effectChanges.length; i++) {
   };
 }
 
+
 var effectDepth = document.querySelector('.effect-level__depth');
 
 /**
  * оброботка изменений позиции слайдера
  */
-
 effectPin.onmousedown = function () {
   var sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   effectPin.onmousemove = function (event) {
