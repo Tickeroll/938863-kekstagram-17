@@ -216,7 +216,7 @@
     var hashtagMaxCount = 5;
     var hashtagColor = '#f45f42';
     var validityMessage;
-    arr.forEach(function (elem, i) {
+    arr.forEach(function (elem, k) {
       if (elem[0] !== '#' && elem !== '') {
         outlineColorChanger(hashtagColor);
         validityMessage = 'Хеш тег должен начинаться символом #';
@@ -230,7 +230,7 @@
         outlineColorChanger(hashtagColor);
         validityMessage = 'Хеш тег не может состоять из одной решётки';
       }
-      for (var j = i + 1; j < arr.length; j++) {
+      for (var j = k + 1; j < arr.length; j++) {
         if (elem.toUpperCase() === arr[j].toUpperCase()) {
           outlineColorChanger(hashtagColor);
           validityMessage = 'Один и тот же хеш-тег не может быть использован дважды';

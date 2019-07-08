@@ -15,7 +15,7 @@
     document.querySelector('.big-picture').classList.add('hidden');
   };
   function renderComments(comments, offset) {
-    const COMMENT_NUMBER = 5;
+    var COMMENT_NUMBER = 5;
     var newComment = document.querySelector('.social__comments');
     var templateComment = document.querySelector('#comment');
     for (var i = 0; (i + COMMENT_NUMBER * offset) < comments.length && i < COMMENT_NUMBER; i++) {
