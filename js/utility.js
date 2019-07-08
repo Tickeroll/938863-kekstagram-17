@@ -3,7 +3,6 @@
 (function () {
   var escKey = 27;
   var isEscEvent = function (evt) {
-    console.log (evt.keyCode);
     return evt.keyCode === escKey;
   };
   var getRandomArrayElem = function (arr) {
@@ -25,17 +24,15 @@
     var messageContainer = template.content.querySelector('.' + status).cloneNode(true);
     var messageTitle = messageContainer.querySelector('.' + status + '__title');
     messageTitle.textContent = text;
-    var messageButton = messageContainer.querySelector('.' + status + '__button');
     document.querySelector('main').appendChild(messageContainer);
 
     var hideMessage = function (evt) {
-      var target = evt.target;
       if (evt.type === 'click'
         || isEscEvent(evt)) {
         messageContainer.removeEventListener('click', hideMessage);
         document.removeEventListener('keyup', hideMessage);
         document.removeEventListener('click', hideMessage);
-        if (messageContainer.parentElement != null) {
+        if (messageContainer.parentElement !== null) {
           messageContainer.parentElement.removeChild(messageContainer);
         }
       }

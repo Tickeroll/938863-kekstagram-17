@@ -121,8 +121,8 @@ var effectPin = document.querySelector('.effect-level__pin');
 /**
  * Добавление обработчиков при нажатии кнопки мышки
  */
-for (var i = 0; i < effectChanges.length; i++) {
-  effectChanges[i].onclick = function () {
+for (var r = 0; r < effectChanges.length; r++) {
+  effectChanges[r].onclick = function () {
     currentEffect = this.id;
     document.querySelector('.img-upload__preview img');
     switch (this.id) {
@@ -165,7 +165,7 @@ var effectDepth = document.querySelector('.effect-level__depth');
 effectPin.onmousedown = function () {
   var sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
   effectPin.onmousemove = function (event) {
-    var  pinMovement = effectPin.offsetLeft + event.movementX;
+    var pinMovement = effectPin.offsetLeft + event.movementX;
     if (pinMovement < 0 || pinMovement > sliderWidth) {
       return;
     }
