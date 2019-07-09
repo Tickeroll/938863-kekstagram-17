@@ -151,22 +151,27 @@
    */
 
   effectPin.onmousedown = function () {
-    effectPin.onmousemove = function (event) {
+    var mousemoveHandler = function (event) {
+      event.preventDefault();
       var pinMovement = effectPin.offsetLeft + event.movementX;
       if (pinMovement < 0 || pinMovement > sliderWidth) {
         return;
       }
       effectPin.style.left = pinMovement + 'px';
       effectDepth.style.width = pinMovement + 'px';
-
     };
+    var mouseupHandler = function (event) {
+      event.preventDefault();
+      document.removeEventListener('mousemove', mousemoveHandler);
+      document.removeEventListener('mouseup', mouseupHandler);
+      effectLevel.value = Math.round(parseInt(effectPin.style.left, 10) / sliderWidth * 10000) / 10000;
+    };
+    document.addEventListener('mousemove', mousemoveHandler);
+    document.addEventListener('mouseup', mouseupHandler);
   };
-  document.querySelector('body').addEventListener('mouseup', function () {
-    effectPin.onmousemove = null;
-    effectLevel.value = parseInt(effectPin.style.left, 10) / sliderWidth;
-  });
+
   /**
-   * измнеения насыщенности фильтра
+   * измненения насыщенности фильтра
    */
   effectLevel.onchange = function () {
     switch (currentEffect) {
@@ -180,13 +185,13 @@
         document.querySelector('.img-upload__preview img').style.filter = 'sepia(' + (this.value) + ')';
         break;
       case 'effect-marvin':
-        document.querySelector('.img-upload__preview img').style.filter = 'invert(' + (this.value) + '%)';
+        document.querySelector('.img-upload__preview img').style.filter = 'invert(' + (this.value * 100) + '%)';
         break;
       case 'effect-phobos':
         document.querySelector('.img-upload__preview img').style.filter = 'blur(' + (this.value * 3) + 'px)';
         break;
       case 'effect-heat':
-        document.querySelector('.img-upload__preview img').style.filter = 'brightness(' + (this.value * 3) + ')';
+        document.querySelector('.img-upload__preview img').style.filter = 'brightness(' + (this.value * 2) + 1 + ')';
         break;
     }
   };
