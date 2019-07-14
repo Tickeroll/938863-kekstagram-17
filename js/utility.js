@@ -43,7 +43,6 @@
     document.addEventListener('click', hideMessage);
   };
   window.utility = {
-    getRandomInt: getRandomInt,
     isEscEvent: isEscEvent,
     createMessage: createMessage,
     getRandomArrayElem: getRandomArrayElem
