@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var COMMENT_NUMBER = 5;
   /**
   * Функция возвращает случайное целое число
   * @param {number} min
@@ -11,21 +12,43 @@
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  var closePopup = function () {
+
+  /**
+   * отрисовывает загружаемую фотогарфию
+   * @param {string} photoPath
+   * @param {string} scale
+   * @param {string} filter
+   */
+  function addPhoto(photoPath, scale, filter) {
+    var template = document.querySelector('#picture');
+    var photoBlockElement = document.querySelector('.pictures');
+    var node = document.importNode(template.content, true);
+    node.querySelector('img').src = photoPath;
+    node.querySelector('img').style.scale = scale;
+    node.querySelector('img').style.filter = filter;
+    photoBlockElement.appendChild(node);
+    photoBlockElement.lastElementChild.photo = {
+      url: photoPath,
+      likes: 0,
+      comments: [],
+    };
+    photoBlockElement.lastElementChild.onclick = function () {
+      renderBigImages(this.photo);
+    };
+  }
+  function closePopup() {
     document.querySelector('.big-picture').classList.add('hidden');
-  };
-  function renderComments(comments, offset) {
-    var COMMENT_NUMBER = 5;
+  }
+  function renderComments(comments, offset, amount) {
     var newComment = document.querySelector('.social__comments');
     var templateComment = document.querySelector('#comment');
-    for (var i = 0; (i + COMMENT_NUMBER * offset) < comments.length && i < COMMENT_NUMBER; i++) {
+    for (var i = offset; i < comments.length && i < offset + amount; i++) {
       var oneComment = document.importNode(templateComment.content, true);
       oneComment.querySelector('img').src = 'img/avatar-' + getRandomInt(1, 6) + '.svg';
-      oneComment.querySelector('.social__text').textContent = comments[i + COMMENT_NUMBER * offset].message;
+      oneComment.querySelector('.social__text').textContent = comments[i].message;
       newComment.appendChild(oneComment);
     }
-    document.querySelector('.social__comment-count').textContent = Math.min(COMMENT_NUMBER + COMMENT_NUMBER * offset, comments.length) + ' из ' + comments.length;
-    return Math.min(COMMENT_NUMBER + COMMENT_NUMBER * offset, comments.length);
+    return Math.min(amount, comments.length - offset);
   }
 
 
@@ -47,14 +70,26 @@
       oldComments[i].parentNode.removeChild(oldComments[i]);
     }
     // отрисовка комментариев
-    renderComments(photo.comments, 0);
-
+    var visibleCommentsNumber = renderComments(photo.comments, 0, COMMENT_NUMBER);
+    document.querySelector('.social__comment-count').textContent = visibleCommentsNumber + ' из ' + photo.comments.length;
     var clickCounter = 1;
     commentsLoader.onclick = function () {
-      var visibleCommentsNumber = renderComments(photo.comments, clickCounter);
+      visibleCommentsNumber += renderComments(photo.comments, clickCounter * COMMENT_NUMBER, COMMENT_NUMBER);
+      document.querySelector('.social__comment-count').textContent = visibleCommentsNumber + ' из ' + photo.comments.length;
       clickCounter++;
       if (visibleCommentsNumber === photo.comments.length) {
         commentsLoader.classList.add('visually-hidden');
+      }
+    };
+    document.querySelector('.social__footer-btn').onclick = function () {
+      photo.comments.push({
+        message: document.querySelector('.social__footer-text').value
+      });
+      document.querySelector('.social__footer-text').value = '';
+      if (visibleCommentsNumber % COMMENT_NUMBER !== 0) {
+        renderComments(photo.comments, photo.comments.length - 1, 1);
+        visibleCommentsNumber++;
+        document.querySelector('.social__comment-count').textContent = visibleCommentsNumber + ' из ' + photo.comments.length;
       }
     };
   }
@@ -158,4 +193,7 @@
       event.target.classList.add('img-filters__button--active');
     });
   });
+  window.gallery = {
+    addPhoto : addPhoto
+  };
 })();

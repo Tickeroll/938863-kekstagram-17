@@ -27,6 +27,7 @@
 
   function formUploadSuccessHandler() {
     var uploadImg = document.querySelector('.img-upload__preview').firstElementChild;
+    window.gallery.addPhoto(uploadImg.src, uploadImg.style.scale, uploadImg.style.filter);
     uploadImg.style = '';
     uploadImg.classList = '';
     closePopup();
@@ -48,6 +49,7 @@
       previewImage.src = fReader.result;
     });
     fReader.readAsDataURL(file);
+    document.querySelector('.scale__control--value').value = 100 + '%';
   });
   /**
    * отображаем форму при загрузке фото
@@ -100,14 +102,14 @@
   document.querySelector('.scale__control--bigger').onclick = function () {
     var percent = parseInt(scaleControlValue.value, 10);
     percent += 25;
-    if (percent < 100) {
+    if (percent <= 100) {
       scaleControlValue.value = percent + '%';
       scaleControlValue.onchange();
     }
   };
 
   scaleControlValue.onchange = function () {
-    document.querySelector('.img-upload__preview').style.transform = 'scale(0.' + parseInt(scaleControlValue.value, 10) + ')';
+    document.querySelector('.img-upload__preview').style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
   };
 
   /**
