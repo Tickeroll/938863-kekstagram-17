@@ -216,7 +216,7 @@
       target.setCustomValidity('');
       target.removeAttribute('style');
     }
-  };
+  }
   hashtagsInput.addEventListener('input', hashTagsInputHandler);
   function makeHashtagValidation(arr, target) {
     function outlineColorChanger(color) {
@@ -248,7 +248,7 @@
       }
     });
     return validityMessage;
-  };
+  }
 
 })();
 

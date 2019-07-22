@@ -195,6 +195,6 @@
     });
   });
   window.gallery = {
-    addPhoto : addPhoto
+    addPhoto: addPhoto
   };
 })();
