@@ -11,7 +11,7 @@
    * Получение данных по фотолисту с сервера
    * @param {function} callback
    */
-  window.getData = function (callback) {
+  function getData(callback) {
     var chery = new XMLHttpRequest();
     chery.addEventListener('load', function () {
       callback(JSON.parse(chery.response));
@@ -19,15 +19,15 @@
 
     chery.open('GET', urlGet);
     chery.send();
-  };
-  window.upload = function (data, onLoad, onError) {
+  }
+  function upload(data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     getXhr(xhr, onLoad, onError);
     xhr.open('POST', urlPost);
     xhr.send(data);
-  };
+  }
 
-  var getXhr = function (xhr, onLoad, onError) {
+  function getXhr(xhr, onLoad, onError) {
     xhr.responseType = 'json';
     xhr.timeout = TIMEOUT_VALUE;
 
@@ -54,5 +54,9 @@
     xhr.addEventListener('timeout', function () {
       onError('Превышен лимит ожидания ' + xhr.timeout);
     });
+  }
+  window.ajax = {
+    upload: upload,
+    getData: getData,
   };
 })();

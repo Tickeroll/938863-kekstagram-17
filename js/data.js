@@ -29,18 +29,25 @@ window.generatePhotoList = (function () {
       'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
       'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
     ];
-    for (var i = 1; i < 26; i++) {
+    var PHOTO_NUMBER = 26;
+    var MIN_COMMENT_NUMBER = 1;
+    var MAX_COMMENT_NUMBER = 3;
+    var MAX_AVATAR_NUMBER = 6;
+    var MIN_AVATAR_NUMBER = 1;
+    var MAX_LIKE_NUMBER = 200;
+    var MIN_LIKE_NUMBER = 15;
+    for (var i = 1; i < PHOTO_NUMBER; i++) {
       var photoComments = [];
-      for (var j = 0; j <= getRandomInt(1, 3); j++) {
+      for (var j = 0; j <= getRandomInt(MIN_COMMENT_NUMBER, MAX_COMMENT_NUMBER); j++) {
         photoComments.push({
-          avatar: 'img/avatar-{{avatarID}}.svg'.replace('{{avatarID}}', getRandomInt(1, 6)),
+          avatar: 'img/avatar-{{avatarID}}.svg'.replace('{{avatarID}}', getRandomInt(MIN_AVATAR_NUMBER, MAX_AVATAR_NUMBER)),
           message: userComments[getRandomInt(0, userComments.length)],
           name: userNames[getRandomInt(0, userNames.length)]
         });
       }
       resultout.push({
         url: 'photos/{{i}}.jpg'.replace('{{i}}', i),
-        likes: getRandomInt(15, 200),
+        likes: getRandomInt(MIN_LIKE_NUMBER, MAX_LIKE_NUMBER),
         comments: photoComments,
       });
     }

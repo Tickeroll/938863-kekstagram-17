@@ -67,7 +67,7 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
+    window.ajax.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
   });
 
   /**
@@ -121,27 +121,27 @@
       switch (this.id) {
         case 'effect-none':
           previewImage.className = 'effects__preview--none';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.add('hidden');
+          document.querySelector('.img-upload__effect-level').classList.add('hidden');
           break;
         case 'effect-chrome':
           previewImage.className = 'effects__preview--chrome';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+          document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-sepia':
           previewImage.className = 'effects__preview--sepia';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+          document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-marvin':
           previewImage.className = 'effects__preview--marvin';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+          document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-phobos':
           previewImage.className = 'effects__preview--phobos';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+          document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-heat':
           previewImage.className = 'effects__preview--heat';
-          document.getElementsByClassName('img-upload__effect-level')[0].classList.remove('hidden');
+          document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
       }
       effectPin.style.left = '100%';

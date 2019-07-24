@@ -2,6 +2,7 @@
 
 (function () {
   var COMMENT_NUMBER = 5;
+  var RANDOM_PHOTO_AMOUNT = 10;
   /**
   * Функция возвращает случайное целое число
   * @param {number} min
@@ -127,7 +128,7 @@
     }
   });
   var lastTimeout;
-  window.getData(function (photos) {
+  window.ajax.getData(function (photos) {
     /**
      *Добавляем в разметку блоки с фтографиями и описанием
      */
@@ -153,7 +154,7 @@
     document.querySelector('#filter-new').addEventListener('click', function (event) {
       var randomPhotos = [];
       var index = [];
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < RANDOM_PHOTO_AMOUNT; i++) {
         var indexPhoto = getRandomInt(0, photos.length);
         while (index.indexOf(indexPhoto) >= 0) {
           indexPhoto = getRandomInt(0, photos.length);

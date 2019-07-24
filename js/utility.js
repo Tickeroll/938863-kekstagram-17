@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  var escKey = 27;
+  var ESCKEY = 27;
   var isEscEvent = function (evt) {
-    return evt.keyCode === escKey;
+    return evt.keyCode === ESCKEY;
   };
   var getRandomArrayElem = function (arr) {
     return arr[getRandomInt(0, arr.length - 1)];
