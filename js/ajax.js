@@ -32,6 +32,10 @@
     xhr.timeout = TIMEOUT_VALUE;
 
     xhr.addEventListener('load', function () {
+      if (xhr.readyState === 0) {
+        onError('Ошибка сети');
+        return;
+      }
       var error;
       switch (xhr.status) {
         case succesResponceCode:
@@ -50,7 +54,6 @@
         onError(error);
       }
     });
-
     xhr.addEventListener('timeout', function () {
       onError('Превышен лимит ожидания ' + xhr.timeout);
     });

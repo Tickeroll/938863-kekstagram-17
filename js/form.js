@@ -14,12 +14,19 @@
 
   function closePopup() {
     uploadForm.classList.add('hidden');
-    formRestoreDefault();
+  }
+  function showPopup() {
+    uploadForm.classList.remove('hidden');
+    sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
+    for (var i = 0; i < effectChanges.length; i++) {
+      if (effectChanges[i].checked) {
+        currentEffect = effectChanges[i].id;
+      }
+    }
+    changeFilterSaturation(effectLevel.value);
   }
 
   function formRestoreDefault() {
-    var file = document.querySelector('#upload-file');
-    file.value = '';
     document.querySelector('.text__description').value = '';
     hashtagsInput.value = '';
   }
@@ -34,10 +41,12 @@
     formRestoreDefault();
     window.utility.createMessage('success', 'Загрузка успешна');
   }
-
   function formUploadErrorHandler() {
     closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки');
+    document.querySelector('.error__button-again').onclick = function () {
+      showPopup();
+    };
   }
 
   // Отображение загружаемой в форму фотографии
@@ -55,14 +64,8 @@
    * отображаем форму при загрузке фото
    */
   document.querySelector('#upload-file').onchange = function () {
-    uploadForm.classList.remove('hidden');
-    sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
-    for (var i = 0; i < effectChanges.length; i++) {
-      if (effectChanges[i].checked) {
-        currentEffect = effectChanges[i].id;
-      }
-    }
-    changeFilterSaturation(effectLevel.value);
+    formRestoreDefault();
+    showPopup();
   };
 
   form.addEventListener('submit', function (evt) {
