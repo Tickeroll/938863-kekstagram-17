@@ -19,7 +19,7 @@
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  var createMessage = function (status, text) {
+  var createMessage = function (status, text, onHide) {
     var template = document.querySelector('#' + status);
     var messageContainer = template.content.querySelector('.' + status).cloneNode(true);
     var messageTitle = messageContainer.querySelector('.' + status + '__title');
@@ -34,6 +34,9 @@
         document.removeEventListener('click', hideMessage);
         if (messageContainer.parentElement !== null) {
           messageContainer.parentElement.removeChild(messageContainer);
+        }
+        if (onHide) {
+          onHide(evt);
         }
       }
     };

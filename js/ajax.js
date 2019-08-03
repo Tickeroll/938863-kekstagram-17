@@ -1,12 +1,12 @@
 'use strict';
 (function () {
+  var SUCCESS_RESPONCE_CODE = 200;
+  var BAD_REQUEST_CODE = 400;
+  var NOT_FOUND_RESPONCE_CODE = 404;
+  var TIMEOUT_VALUE = 10000;
+  var BAD_READY_STATUS = 0;
   var urlGet = 'https://js.dump.academy/kekstagram/data';
   var urlPost = 'https://js.dump.academy/kekstagram';
-  var succesResponceCode = 200;
-  var badRequestCode = 400;
-  var notFoundResponceCode = 404;
-  var TIMEOUT_VALUE = 10000;
-
   /**
    * Получение данных по фотолисту с сервера
    * @param {function} callback
@@ -32,19 +32,19 @@
     xhr.timeout = TIMEOUT_VALUE;
 
     xhr.addEventListener('load', function () {
-      if (xhr.readyState === 0) {
+      if (xhr.readyState === BAD_READY_STATUS) {
         onError('Ошибка сети');
         return;
       }
       var error;
       switch (xhr.status) {
-        case succesResponceCode:
+        case SUCCESS_RESPONCE_CODE:
           onLoad(xhr.response);
           break;
-        case badRequestCode:
+        case BAD_REQUEST_CODE:
           error = 'Неверный запрос';
           break;
-        case notFoundResponceCode:
+        case NOT_FOUND_RESPONCE_CODE:
           error = 'Ничего не найдено';
           break;
         default:
@@ -56,6 +56,9 @@
     });
     xhr.addEventListener('timeout', function () {
       onError('Превышен лимит ожидания ' + xhr.timeout);
+    });
+    xhr.addEventListener('error', function () {
+      onError('Ошибка сети');
     });
   }
   window.ajax = {

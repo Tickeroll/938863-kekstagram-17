@@ -5,18 +5,22 @@
   var scaleControlValue = document.querySelector('.scale__control--value');
   var effectChanges = document.querySelectorAll('.effects__radio');
   var currentEffect = '';
+  var currentEffectClass = '';
   var effectLevel = document.querySelector('.effect-level__value');
   var effectPin = document.querySelector('.effect-level__pin');
   var sliderWidth;
   var effectDepth = document.querySelector('.effect-level__depth');
   var form = document.querySelector('.img-upload__form');
-  var previewImage = document.querySelector('.img-upload__preview img');
-
+  var previewImage = document.querySelector('.img-upload__preview');
+  var publicationButton = document.querySelector('.img-upload__submit');
+  var fileInput = document.querySelector('#upload-file');
+  var imageInContainer = document.querySelector('.img-upload__preview img');
   function closePopup() {
     uploadForm.classList.add('hidden');
   }
   function showPopup() {
     uploadForm.classList.remove('hidden');
+    publicationButton.removeAttribute('disabled');
     sliderWidth = document.querySelector('.effect-level__line').offsetWidth;
     for (var i = 0; i < effectChanges.length; i++) {
       if (effectChanges[i].checked) {
@@ -25,12 +29,13 @@
     }
     changeFilterSaturation(effectLevel.value);
   }
-
   function formRestoreDefault() {
     document.querySelector('.text__description').value = '';
     hashtagsInput.value = '';
+    fileInput.value = '';
+    scaleControlValue.value = '100%';
+    previewImage.style.transform = 'scale(1)';
   }
-
 
   function formUploadSuccessHandler() {
     var uploadImg = document.querySelector('.img-upload__preview').firstElementChild;
@@ -38,53 +43,59 @@
     uploadImg.style = '';
     uploadImg.classList = '';
     closePopup();
-    formRestoreDefault();
-    window.utility.createMessage('success', 'Загрузка успешна');
+    window.utility.createMessage('success', 'Загрузка успешна', function () {
+      formRestoreDefault();
+    });
   }
   function formUploadErrorHandler() {
     closePopup();
-    window.utility.createMessage('error', 'Ошибка загрузки');
+    window.utility.createMessage('error', 'Ошибка загрузки', function (evt) {
+      if (!(evt.type === 'click' && evt.target.classList.contains('error__button-again'))) {
+        formRestoreDefault();
+      }
+    });
     document.querySelector('.error__button-again').onclick = function () {
       showPopup();
     };
   }
 
   // Отображение загружаемой в форму фотографии
-  var fileInput = document.querySelector('#upload-file');
   fileInput.addEventListener('change', function () {
     var file = fileInput.files[0];
     var fReader = new FileReader();
     fReader.addEventListener('load', function () {
-      previewImage.src = fReader.result;
+      imageInContainer.src = fReader.result;
     });
     fReader.readAsDataURL(file);
-    document.querySelector('.scale__control--value').value = 100 + '%';
+    scaleControlValue.value = '100%';
   });
   /**
    * отображаем форму при загрузке фото
    */
   document.querySelector('#upload-file').onchange = function () {
-    formRestoreDefault();
     showPopup();
   };
 
   form.addEventListener('submit', function (evt) {
+    publicationButton.setAttribute('disabled', 'disabled');
     evt.preventDefault();
     window.ajax.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
   });
 
   /**
-   * при нжатии ан ескапе скрывается форма
-   * @param {Event} event
+   * при нажатии на esc скрывается форма
+   * @param {Event} evt
    */
-  document.querySelector('body').addEventListener('keyup', function (event) {
-    if (event.key === 'Escape') {
+  document.querySelector('body').addEventListener('keyup', function (evt) {
+    if (evt.key === 'Escape') {
       uploadForm.classList.add('hidden');
+      formRestoreDefault();
     }
   });
 
   formEscape.onclick = function () {
     uploadForm.classList.add('hidden');
+    formRestoreDefault();
   };
 
   /**
@@ -112,7 +123,7 @@
   };
 
   scaleControlValue.onchange = function () {
-    document.querySelector('.img-upload__preview').style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
+    previewImage.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
   };
 
   /**
@@ -121,32 +132,36 @@
   for (var i = 0; i < effectChanges.length; i++) {
     effectChanges[i].onclick = function () {
       currentEffect = this.id;
+      if (currentEffectClass > '') {
+        previewImage.classList.remove(currentEffectClass);
+      }
       switch (this.id) {
         case 'effect-none':
-          previewImage.className = 'effects__preview--none';
+          currentEffectClass = 'effects__preview--none';
           document.querySelector('.img-upload__effect-level').classList.add('hidden');
           break;
         case 'effect-chrome':
-          previewImage.className = 'effects__preview--chrome';
+          currentEffectClass = 'effects__preview--chrome';
           document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-sepia':
-          previewImage.className = 'effects__preview--sepia';
+          currentEffectClass = 'effects__preview--sepia';
           document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-marvin':
-          previewImage.className = 'effects__preview--marvin';
+          currentEffectClass = 'effects__preview--marvin';
           document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-phobos':
-          previewImage.className = 'effects__preview--phobos';
+          currentEffectClass = 'effects__preview--phobos';
           document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
         case 'effect-heat':
-          previewImage.className = 'effects__preview--heat';
+          currentEffectClass = 'effects__preview--heat';
           document.querySelector('.img-upload__effect-level').classList.remove('hidden');
           break;
       }
+      previewImage.classList.add(currentEffectClass);
       effectPin.style.left = '100%';
       effectDepth.style.width = '100%';
       changeFilterSaturation(100);
@@ -156,9 +171,9 @@
    * оброботка изменений позиции слайдера
    */
   effectPin.onmousedown = function () {
-    function mousemoveHandler(event) {
-      event.preventDefault();
-      var pinMovement = effectPin.offsetLeft + event.movementX;
+    function mousemoveHandler(evt) {
+      evt.preventDefault();
+      var pinMovement = effectPin.offsetLeft + evt.movementX;
       if (pinMovement < 0 || pinMovement > sliderWidth) {
         return;
       }
@@ -167,8 +182,8 @@
       effectLevel.value = Math.round(parseInt(effectPin.style.left, 10) / sliderWidth * 100);
       changeFilterSaturation(effectLevel.value);
     }
-    function mouseupHandler(event) {
-      event.preventDefault();
+    function mouseupHandler(evt) {
+      evt.preventDefault();
       document.removeEventListener('mousemove', mousemoveHandler);
       document.removeEventListener('mouseup', mouseupHandler);
     }
@@ -203,9 +218,9 @@
         break;
     }
   }
-  document.forms[1].elements['description'].onkeyup = function (event) {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
+  document.forms[1].elements['description'].onkeyup = function (evt) {
+    if (evt.key === 'Escape') {
+      evt.stopPropagation();
     }
   };
   // Валидация хештегов формы потравки фото
