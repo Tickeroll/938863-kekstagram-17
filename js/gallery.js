@@ -3,6 +3,7 @@
 (function () {
   var COMMENT_NUMBER = 5;
   var RANDOM_PHOTO_AMOUNT = 10;
+
   /**
   * Функция возвращает случайное целое число
   * @param {number} min
@@ -38,9 +39,12 @@
       renderBigImages(this.photo);
     };
   }
+
   function closePopup() {
     document.querySelector('.big-picture').classList.add('hidden');
+    document.querySelector('.likes-count').classList.remove('likes-count--active');
   }
+
   function renderComments(comments, offset, amount) {
     var newComment = document.querySelector('.social__comments');
     var templateComment = document.querySelector('#comment');
@@ -52,7 +56,6 @@
     }
     return Math.min(amount, comments.length - offset);
   }
-
 
   /**
    * Функция рендера больших картинок
@@ -69,11 +72,13 @@
     } else {
       commentsLoader.classList.remove('visually-hidden');
     }
+
     // Удаление предыдущих комментариев
     var oldComments = document.querySelectorAll('.social__comments .social__comment');
     for (var i = 0; i < oldComments.length; i++) {
       oldComments[i].parentNode.removeChild(oldComments[i]);
     }
+
     // отрисовка комментариев
     var visibleCommentsNumber = renderComments(photo.comments, 0, COMMENT_NUMBER);
     document.querySelector('.social__comment-count').textContent = visibleCommentsNumber + ' из ' + photo.comments.length;
@@ -98,6 +103,7 @@
       }
     };
   }
+
   /**
    * Функция отрисовки списка фотографий
    * @param {array} photos
@@ -121,6 +127,7 @@
       };
     }
   }
+
   // Обработчик навжатия на кнопку закрыть
   document.querySelector('.big-picture__cancel').onclick = function () {
     closePopup();
@@ -130,6 +137,15 @@
       closePopup();
     }
   });
+
+  // Добавление лайка к фото
+  document.querySelector('.likes-count').onclick = function () {
+    if (!this.classList.contains('likes-count--active')) {
+      document.querySelector('.likes-count').classList.add('likes-count--active');
+      document.querySelector('.likes-count--active').textContent = parseInt(document.querySelector('.likes-count--active').textContent) + 1;
+    }
+  };
+
   var lastTimeout;
   window.ajax.getData(function (photos) {
     /**
@@ -151,6 +167,7 @@
       document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
     });
+
     /**
      * обработчик кнопки фильтра - "новые"
      */

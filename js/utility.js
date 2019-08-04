@@ -2,12 +2,15 @@
 
 (function () {
   var ESCKEY = 27;
-  var isEscEvent = function (evt) {
+
+  function isEscEvent(evt) {
     return evt.keyCode === ESCKEY;
-  };
-  var getRandomArrayElem = function (arr) {
+  }
+
+  function getRandomArrayElem(arr) {
     return arr[getRandomInt(0, arr.length - 1)];
-  };
+  }
+
   /**
    * Функция возвращает случайное целое число
    * @param {number} min
@@ -19,7 +22,8 @@
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
-  var createMessage = function (status, text, onHide) {
+
+  function createMessage(status, text, onHide) {
     var template = document.querySelector('#' + status);
     var messageContainer = template.content.querySelector('.' + status).cloneNode(true);
     var messageTitle = messageContainer.querySelector('.' + status + '__title');
@@ -44,7 +48,8 @@
     messageContainer.addEventListener('click', hideMessage);
     document.addEventListener('keyup', hideMessage);
     document.addEventListener('click', hideMessage);
-  };
+  }
+
   window.utility = {
     isEscEvent: isEscEvent,
     createMessage: createMessage,

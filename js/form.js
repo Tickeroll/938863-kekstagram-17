@@ -18,6 +18,7 @@
   function closePopup() {
     uploadForm.classList.add('hidden');
   }
+
   function showPopup() {
     uploadForm.classList.remove('hidden');
     publicationButton.removeAttribute('disabled');
@@ -29,6 +30,7 @@
     }
     changeFilterSaturation(effectLevel.value);
   }
+
   function formRestoreDefault() {
     document.querySelector('.text__description').value = '';
     hashtagsInput.value = '';
@@ -47,6 +49,7 @@
       formRestoreDefault();
     });
   }
+
   function formUploadErrorHandler() {
     closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки', function (evt) {
@@ -167,6 +170,7 @@
       changeFilterSaturation(100);
     };
   }
+
   /**
    * оброботка изменений позиции слайдера
    */
@@ -267,6 +271,4 @@
     });
     return validityMessage;
   }
-
 })();
-

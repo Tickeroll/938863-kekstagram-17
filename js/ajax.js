@@ -20,6 +20,7 @@
     chery.open('GET', urlGet);
     chery.send();
   }
+
   function upload(data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     getXhr(xhr, onLoad, onError);
