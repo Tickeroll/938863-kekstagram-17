@@ -142,7 +142,7 @@
   document.querySelector('.likes-count').onclick = function () {
     if (!this.classList.contains('likes-count--active')) {
       document.querySelector('.likes-count').classList.add('likes-count--active');
-      document.querySelector('.likes-count--active').textContent = parseInt(document.querySelector('.likes-count--active').textContent) + 1;
+      document.querySelector('.likes-count--active').textContent = parseInt(document.querySelector('.likes-count--active').textContent, 10) + 1;
     }
   };
 
