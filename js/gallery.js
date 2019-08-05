@@ -63,6 +63,7 @@
    */
   function renderBigImages(photo) {
     var commentsLoader = document.querySelector('.social__comments-loader');
+    var commentTextElement = document.querySelector('.social__footer-text');
     document.querySelector('.big-picture').classList.remove('hidden');
     document.querySelector('.big-picture__img img').src = photo.url;
     document.querySelector('.likes-count').textContent = photo.likes;
@@ -91,14 +92,16 @@
         commentsLoader.classList.add('visually-hidden');
       }
     };
-    document.querySelector('.social__footer-btn').onclick = function () {
-      photo.comments.push({
-        message: document.querySelector('.social__footer-text').value
-      });
-      document.querySelector('.social__footer-text').value = '';
-      if (visibleCommentsNumber % COMMENT_NUMBER !== 0 || visibleCommentsNumber === 0) {
-        renderComments(photo.comments, photo.comments.length - 1, 1);
-        visibleCommentsNumber++;
+
+    document.querySelector('.social__footer-btn').onclick = commentTextElement.onkeyup = function (evt) {
+      if (window.utility.isClickEvent(evt) || window.utility.isEnterKeyEvent(evt)) {
+        photo.comments.push({
+          message: commentTextElement.value
+        });
+        commentTextElement.value = '';
+        if (visibleCommentsNumber % COMMENT_NUMBER !== 0 || visibleCommentsNumber === 0 || commentsLoader.classList.contains('visually-hidden')) {
+          visibleCommentsNumber += renderComments(photo.comments, photo.comments.length - 1, 1);
+        }
         document.querySelector('.social__comment-count').textContent = visibleCommentsNumber + ' из ' + photo.comments.length;
       }
     };

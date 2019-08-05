@@ -2,9 +2,19 @@
 
 (function () {
   var ESCKEY = 27;
+  var ENTER_KEY = 13;
+  var CLICK_EVENT = 'click';
 
   function isEscEvent(evt) {
     return evt.keyCode === ESCKEY;
+  }
+
+  function isEnterKeyEvent(evt) {
+    return evt.keyCode === ENTER_KEY;
+  }
+
+  function isClickEvent(evt) {
+    return evt.type === CLICK_EVENT;
   }
 
   function getRandomArrayElem(arr) {
@@ -52,6 +62,8 @@
 
   window.utility = {
     isEscEvent: isEscEvent,
+    isEnterKeyEvent: isEnterKeyEvent,
+    isClickEvent: isClickEvent,
     createMessage: createMessage,
     getRandomArrayElem: getRandomArrayElem
   };
